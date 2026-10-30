@@ -5,9 +5,9 @@
  *   npm run log -- two-pointers/001 --mins 18 --hints 1 --notes "forgot dup skip"
  *
  * The problem argument can be a prefix: "two-pointers/001" matches
- * "problems/two-pointers/001-pair-sum-sorted".
+ * "problems/02-two-pointers/level-1/001-pair-sum-sorted".
  */
-import { readdirSync, readFileSync, existsSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { parseArgs } from "node:util";
@@ -28,19 +28,27 @@ if (!arg) {
   process.exit(1);
 }
 
-const [topic, prefix = ""] = arg.replace(/^problems\//, "").split("/");
-const topicDir = join(ROOT, "problems", topic!);
-if (!existsSync(topicDir)) {
-  console.error(`No topic folder: problems/${topic}`);
+const [rawTopic, prefix = ""] = arg.replace(/^problems\//, "").split("/");
+// Topic folders are numbered for ordering ("02-two-pointers"); the topic id drops the number.
+const topic = rawTopic!.replace(/^\d+-/, "");
+const topicFolder = readdirSync(join(ROOT, "problems")).find((d) => d.replace(/^\d+-/, "") === topic);
+if (!topicFolder) {
+  console.error(`No topic folder for: ${topic}`);
   process.exit(1);
 }
-const match = readdirSync(topicDir).find((d) => d.startsWith(prefix));
-if (!match) {
-  console.error(`No problem matching "${prefix}" in problems/${topic}`);
+const topicDir = join(ROOT, "problems", topicFolder);
+// Problems live in level subfolders; NNN is unique across the whole topic.
+const found = readdirSync(topicDir)
+  .filter((l) => l.startsWith("level-"))
+  .flatMap((l) => readdirSync(join(topicDir, l)).map((d) => [l, d] as const))
+  .find(([, d]) => d.startsWith(prefix) && d !== ".gitkeep");
+if (!found) {
+  console.error(`No problem matching "${prefix}" in problems/${topicFolder}`);
   process.exit(1);
 }
+const [levelFolder, match] = found;
 
-const problemDir = join(topicDir, match);
+const problemDir = join(topicDir, levelFolder, match);
 const meta = JSON.parse(readFileSync(join(problemDir, "meta.json"), "utf8")) as { level: number };
 
 const run = spawnSync("npx", ["vitest", "run", problemDir, "--reporter=json"], {

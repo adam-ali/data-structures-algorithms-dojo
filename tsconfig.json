@@ -12,5 +12,5 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["problems", "scripts", "lib", "vitest.config.ts"]
+  "include": ["problems", "dojo/scripts", "dojo/lib", "vitest.config.ts"]
 }

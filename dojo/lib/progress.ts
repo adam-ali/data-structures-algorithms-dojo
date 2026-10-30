@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-export const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+export const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 export const LOG_PATH = join(ROOT, "progress", "log.json");
 
 export interface Attempt {

@@ -7,9 +7,10 @@
   "scripts": {
     "test": "vitest",
     "practice": "vitest --watch",
-    "log": "tsx scripts/log.ts",
-    "today": "tsx scripts/stats.ts",
-    "stats": "tsx scripts/stats.ts --full",
+    "log": "tsx dojo/scripts/log.ts",
+    "today": "tsx dojo/scripts/stats.ts",
+    "stats": "tsx dojo/scripts/stats.ts --full",
+    "ui": "tsx dojo/scripts/ui.ts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
