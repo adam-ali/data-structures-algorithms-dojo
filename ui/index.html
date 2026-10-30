@@ -26,6 +26,7 @@
   nav .brand { font-weight: 700; font-size: 18px; padding: 0 8px 14px; display: block; }
   nav .home { display: block; padding: 6px 8px; border-radius: 6px; margin-bottom: 10px; }
   nav details { margin-bottom: 2px; }
+  nav .bottom { margin: 16px 0 0; padding-top: 10px; border-top: 1px solid var(--border); border-radius: 0; }
   nav summary { cursor: pointer; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; list-style: none; }
   nav summary::-webkit-details-marker { display: none; }
   nav summary:hover, nav .home:hover, nav .prob:hover { background: var(--code); }
@@ -72,6 +73,16 @@
   .md summary { cursor: pointer; font-weight: 600; color: var(--accent); }
   .cmd { font-family: ui-monospace, monospace; font-size: 13px; background: var(--code); padding: 10px 14px; border-radius: 8px; margin: 14px 0 20px; overflow-x: auto; white-space: nowrap; }
   .muted { color: var(--muted); }
+  .timer { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; box-shadow: 0 4px 12px rgb(0 0 0 / .08); }
+  .timer .time { font: 700 34px/1 ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing: .02em; min-width: 5ch; }
+  .timer .state { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-right: auto; }
+  .timer .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+  .timer.running .time { color: var(--accent); }
+  .timer.running .dot { background: var(--ok); animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .3; } }
+  .timer button { font: inherit; font-weight: 600; border-radius: 8px; padding: 8px 16px; cursor: pointer; border: 1px solid var(--border); background: var(--code); color: var(--text); }
+  .timer button.primary { background: var(--accent); border-color: var(--accent); color: var(--panel); min-width: 90px; }
+  .timer button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   @media (max-width: 760px) {
     .app { grid-template-columns: 1fr; }
     nav { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
@@ -120,7 +131,8 @@ function renderNav(route) {
           ? l.problems.map((p) => `<a class="prob ${route.topic === t.id && route.slug === p.slug ? "active" : ""}" href="#/p/${t.id}/${p.slug}">${esc(p.meta.title ?? p.slug)} ${problemStatus(p)}</a>`).join("")
           : `<div class="empty">no problems yet</div>`)).join("")}
       </details>`;
-    }).join("");
+    }).join("") +
+    `<a class="home bottom ${route.view === "bigo" ? "active" : ""}" href="#/big-o">⏱️ Big O explained</a>`;
 }
 
 function heatmap(log) {
@@ -192,23 +204,196 @@ function renderProblem(topicId, slug) {
   const p = t?.levels.flatMap((l) => l.problems).find((x) => x.slug === slug);
   if (!p) return `<h1>Not found</h1><p class="muted">${esc(topicId)}/${esc(slug)}</p>`;
   const num = slug.split("-")[0];
-  return `<div class="sub">${esc(p.path)} · created ${esc(p.meta.created ?? "?")} ${problemStatus(p)}</div>
+  return `<div class="timer" data-id="${esc(topicId)}/${esc(slug)}">
+      <div class="time" role="timer" aria-live="off">00:00</div>
+      <div class="state"><span class="dot"></span><span class="label">Not started</span></div>
+      <button class="primary" data-act="toggle">Start</button>
+      <button data-act="reset">Reset</button>
+    </div>
+    <div class="sub">${esc(p.path)} · created ${esc(p.meta.created ?? "?")} ${problemStatus(p)}</div>
     <div class="md">${marked.parse(p.markdown)}</div>
-    <div class="cmd">npm run log -- ${esc(topicId)}/${esc(num)} --mins &lt;m&gt; --hints &lt;h&gt;</div>
+    <div class="cmd">npm run log -- ${esc(topicId)}/${esc(num)} --mins <span class="mins">&lt;m&gt;</span> --hints &lt;h&gt;</div>
     <h2>Your attempts</h2>${attemptsTable([...p.attempts].reverse())}`;
 }
 
+const BIG_O = `
+# Big O, in simple English
+
+**Big O** describes how the work a piece of code does **grows** as its input gets bigger.
+\`n\` is the size of the input, for example the length of the array.
+
+It's not about seconds. It answers one question: **if the input is 10 times bigger, how much more work is there?**
+
+We only keep the biggest part and drop constants: \`3n + 5\` is just **O(n)**, and \`n² + n\` is just **O(n²)**.
+
+## O(1): constant
+
+The work stays the **same**, however big the input is.
+
+\`\`\`ts
+function first(nums: number[]) {
+  return nums[0];          // one step, whether nums has 5 items or 5 million
+}
+
+const seen = new Set<number>();
+seen.has(42);              // Set and Map lookups are O(1) on average
+\`\`\`
+
+**Real life:** opening a book at a bookmark. A longer book doesn't make it slower.
+
+## O(n): linear
+
+The work grows **in step** with the input. Twice the items means twice the work.
+
+\`\`\`ts
+function sum(nums: number[]) {
+  let total = 0;
+  for (const x of nums) total += x;   // touches each item once
+  return total;
+}
+\`\`\`
+
+**Real life:** reading every page of a book. A book twice as long takes twice as long.
+
+Two loops one **after** the other are still O(n): \`n + n = 2n\`, and we drop the 2.
+
+## O(n²): quadratic
+
+A loop **inside** a loop over the same input. Twice the items means **four times** the work.
+
+\`\`\`ts
+function hasDuplicate(nums: number[]) {
+  for (let i = 0; i < nums.length; i++)
+    for (let j = i + 1; j < nums.length; j++)
+      if (nums[i] === nums[j]) return true;   // compares every pair
+  return false;
+}
+\`\`\`
+
+**Real life:** everyone at a party shaking hands with everyone else.
+
+The same task in **O(n)**, using a Set:
+
+\`\`\`ts
+function hasDuplicate(nums: number[]) {
+  const seen = new Set<number>();
+  for (const x of nums) {
+    if (seen.has(x)) return true;   // O(1) check
+    seen.add(x);
+  }
+  return false;
+}
+\`\`\`
+
+## O(log n): logarithmic
+
+Each step **throws away half** of what's left. Very slow growth: 1,000,000 items need only about 20 steps.
+
+\`\`\`ts
+// binary search on a sorted array
+let lo = 0, hi = nums.length - 1;
+while (lo <= hi) {
+  const mid = (lo + hi) >> 1;
+  if (nums[mid] === target) return mid;
+  if (nums[mid] < target) lo = mid + 1; else hi = mid - 1;
+}
+\`\`\`
+
+**Real life:** finding a word in a dictionary by opening it in the middle, then the middle of the correct half, and so on.
+
+## O(n log n)
+
+About \`n\` times \`log n\`. This is the cost of a good **sort**, like \`nums.sort((a, b) => a - b)\`. If your solution sorts first, it's at least O(n log n).
+
+## Time vs. space
+
+- **Time complexity:** how many **steps** the code takes.
+- **Space complexity:** how much **extra memory** it uses, not counting the input.
+
+"O(n) time, O(1) space" means one pass over the data, using only a few variables (no new array, Map or Set that grows with \`n\`).
+
+The Set version of \`hasDuplicate\` above is **O(n) time, O(n) space**. It trades memory for speed.
+
+## How big is too big?
+
+Rough step counts when \`n = 100,000\`:
+
+| Big O | Steps | Feels like |
+|---|---|---|
+| O(1) | 1 | instant |
+| O(log n) | ~17 | instant |
+| O(n) | 100,000 | instant |
+| O(n log n) | ~1,700,000 | instant |
+| O(n²) | 10,000,000,000 | many seconds (too slow) |
+
+This is why each problem here has a **large-input test**. It passes fast with the target complexity and fails with O(n²).
+
+## Quick ways to spot it
+
+- One loop over the input → **O(n)**
+- A loop inside a loop → **O(n²)**
+- Halving the range each step → **O(log n)**
+- Sorting → **O(n log n)**
+- No loops, just lookups or maths → **O(1)**
+- A new array, Map or Set that grows with the input → **O(n) space**
+`;
+
 function route() {
   const [, view, topic, slug] = location.hash.slice(1).split("/");
+  if (view === "big-o") return { view: "bigo" };
   return view === "p" ? { view: "problem", topic, slug } : { view: "home" };
 }
 
 function render() {
   const r = route();
   renderNav(r);
-  document.getElementById("main").innerHTML = r.view === "problem" ? renderProblem(r.topic, r.slug) : renderHome();
+  document.getElementById("main").innerHTML = r.view === "problem" ? renderProblem(r.topic, r.slug)
+    : r.view === "bigo" ? `<div class="md">${marked.parse(BIG_O)}</div>` : renderHome();
+  tickTimer();
   window.scrollTo(0, 0);
 }
+
+// Timer per problem, kept in this browser so a refresh or switching problems doesn't lose it.
+// Stored as { ms: time banked so far, since: when it was last started (null if paused) }.
+const timerKey = (id) => "dojo-timer:" + id;
+function getTimer(id) {
+  try { return JSON.parse(localStorage.getItem(timerKey(id))) ?? { ms: 0, since: null }; }
+  catch { return { ms: 0, since: null }; }
+}
+function setTimer(id, t) {
+  try { localStorage.setItem(timerKey(id), JSON.stringify(t)); } catch {}
+}
+const elapsed = (t) => t.ms + (t.since ? Date.now() - t.since : 0);
+function fmtTime(ms) {
+  const total = Math.floor(ms / 1000), h = Math.floor(total / 3600), m = Math.floor(total / 60) % 60, s = total % 60;
+  const pad = (n) => String(n).padStart(2, "0");
+  return h ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+}
+
+function tickTimer() {
+  const el = document.querySelector(".timer");
+  if (!el) return;
+  const t = getTimer(el.dataset.id), ms = elapsed(t), running = t.since != null;
+  el.classList.toggle("running", running);
+  el.querySelector(".time").textContent = fmtTime(ms);
+  el.querySelector(".label").textContent = running ? "Running" : ms ? "Paused" : "Not started";
+  el.querySelector("[data-act=toggle]").textContent = running ? "Pause" : ms ? "Resume" : "Start";
+  const mins = document.querySelector(".cmd .mins");
+  if (mins) mins.textContent = ms ? Math.max(1, Math.round(ms / 60000)) : "<m>";
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".timer button");
+  if (!btn) return;
+  const id = btn.closest(".timer").dataset.id, t = getTimer(id);
+  if (btn.dataset.act === "toggle") {
+    setTimer(id, t.since ? { ms: elapsed(t), since: null } : { ms: t.ms, since: Date.now() });
+  } else if (elapsed(t) === 0 || confirm("Reset the timer to 00:00?")) {
+    setTimer(id, { ms: 0, since: null });
+  }
+  tickTimer();
+});
+setInterval(tickTimer, 250);
 
 addEventListener("hashchange", render);
 addEventListener("focus", load); // pick up new problems/attempts when you come back to the tab

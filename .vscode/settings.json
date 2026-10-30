@@ -1,0 +1,11 @@
+{
+  // Practice repo: no help writing code. Red error underlines (type checking) stay on.
+  "editor.quickSuggestions": { "other": "off", "comments": "off", "strings": "off" },
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.wordBasedSuggestions": "off",
+  "editor.parameterHints.enabled": false,
+  "editor.inlineSuggest.enabled": false,
+  "editor.snippetSuggestions": "none",
+  "github.copilot.enable": { "*": false },
+  "github.copilot.editor.enableAutoCompletions": false
+}

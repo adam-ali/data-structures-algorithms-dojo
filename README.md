@@ -4,7 +4,26 @@ A place to practise data structures and algorithms (DSA) a little every day, in 
 
 It works like [Kumon](https://en.wikipedia.org/wiki/Kumon): small problems, done often, that get harder as you improve. Claude makes each problem for you. You write the solution, the tests check it, and your progress is saved.
 
-![The DSA Dojo progress page](docs/ui.png)
+![The DSA Dojo progress page](dojo/img/ui.png)
+
+## Topics
+
+1. [Arrays & Hashing](problems/01-arrays-hashing/)
+2. [Two Pointers](problems/02-two-pointers/)
+3. [Sliding Window](problems/03-sliding-window/)
+4. [Stack & Monotonic Stack](problems/04-stack/)
+5. [Binary Search](problems/05-binary-search/)
+6. [Linked Lists](problems/06-linked-lists/)
+7. [Trees (DFS/BFS)](problems/07-trees/)
+8. [Tries](problems/08-tries/)
+9. [Heaps / Priority Queue](problems/09-heaps/)
+10. [Backtracking](problems/10-backtracking/)
+11. [Graphs](problems/11-graphs/)
+12. [Dynamic Programming (1D)](problems/12-dp-1d/)
+13. [Dynamic Programming (2D)](problems/13-dp-2d/)
+14. [Greedy](problems/14-greedy/)
+15. [Intervals](problems/15-intervals/)
+16. [Bit Manipulation](problems/16-bits/)
 
 ## What's in this repo
 
@@ -69,7 +88,3 @@ Every topic has 4 levels:
 | `npm run log -- <topic>/<num> [--mins N] [--hints N] [--notes "..."]` | Runs a problem's tests and saves the attempt |
 | `npm run ui` | Opens the web page at <http://localhost:4321> |
 | `npm run typecheck` | Checks all the TypeScript types |
-
-## Topics
-
-Arrays & Hashing · Two Pointers · Sliding Window · Stack · Binary Search · Linked Lists · Trees · Tries · Heaps · Backtracking · Graphs · 1D Dynamic Programming · 2D Dynamic Programming · Greedy · Intervals · Bit Manipulation
