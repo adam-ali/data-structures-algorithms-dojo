@@ -29,7 +29,18 @@
     "passed": 8,
     "total": 8,
     "solved": true,
-    "minutes": null,
+    "minutes": 21,
+    "hints": 0
+  },
+  {
+    "date": "2026-11-06T17:46:42.412Z",
+    "topic": "sliding-window",
+    "level": 2,
+    "problem": "sliding-window/004-fewest-days-to-goal",
+    "passed": 8,
+    "total": 8,
+    "solved": true,
+    "minutes": 90,
     "hints": 0
   }
 ]
