@@ -28,7 +28,7 @@ function data() {
       });
       return { level: i + 1, description, problems };
     });
-    return { id: t.id, name: t.name, folder, levels, state: topicState(log, t.id) };
+    return { id: t.id, name: `${folder?.match(/^\d+/)?.[0] ?? "??"} ${t.name}`, folder, levels, state: topicState(log, t.id) };
   });
   return { topics, log, cleanToLevelUp: CLEAN_SOLVES_TO_LEVEL_UP };
 }

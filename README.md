@@ -49,7 +49,7 @@ Each problem folder has 4 files:
 
 1. **See what to practise.**
    ```bash
-   npm run today
+   pnpm today
    ```
 2. **Get a problem.** Open Claude Code in this folder and ask:
    > give me today's problem
@@ -57,15 +57,15 @@ Each problem folder has 4 files:
    You can also ask for a topic or level, like "new sliding-window problem" or "next two-pointers, level 2".
 3. **Solve it.** Read `problem.md` and write your code in `solution.ts`. Keep the tests running while you work:
    ```bash
-   npm run practice
+   pnpm practice
    ```
 4. **Save your attempt.** This runs the tests itself, so the result is always honest:
    ```bash
-   npm run log -- two-pointers/001 --mins 18 --hints 1 --notes "forgot duplicates"
+   pnpm log -- two-pointers/001 --mins 18 --hints 1 --notes "forgot duplicates"
    ```
 5. **Get feedback (optional).** Ask Claude to "review my solution".
 
-To read problems and see your progress in the browser, run `npm run ui` and open <http://localhost:4321>.
+To read problems and see your progress in the browser, run `pnpm ui` and open <http://localhost:4321>.
 
 ## Levels
 
@@ -82,9 +82,9 @@ Every topic has 4 levels:
 
 | Command | What it does |
 |---|---|
-| `npm run today` | Shows what to practise today |
-| `npm run stats` | Shows every topic and your last 10 attempts |
-| `npm run practice` | Runs the tests again each time you save |
-| `npm run log -- <topic>/<num> [--mins N] [--hints N] [--notes "..."]` | Runs a problem's tests and saves the attempt |
-| `npm run ui` | Opens the web page at <http://localhost:4321> |
-| `npm run typecheck` | Checks all the TypeScript types |
+| `pnpm today` | Shows what to practise today |
+| `pnpm stats` | Shows every topic and your last 10 attempts |
+| `pnpm practice` | Runs the tests again each time you save |
+| `pnpm log -- <topic>/<num> [--mins N] [--hints N] [--notes "..."]` | Runs a problem's tests and saves the attempt |
+| `pnpm ui` | Opens the web page at <http://localhost:4321> |
+| `pnpm typecheck` | Checks all the TypeScript types |

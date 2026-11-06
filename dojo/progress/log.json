@@ -1,1 +1,35 @@
-[]
+[
+  {
+    "date": "2026-11-02T20:13:16.271Z",
+    "topic": "sliding-window",
+    "level": 1,
+    "problem": "sliding-window/002-loudest-chunk",
+    "passed": 8,
+    "total": 8,
+    "solved": true,
+    "minutes": 36,
+    "hints": 0
+  },
+  {
+    "date": "2026-11-02T20:15:00.054Z",
+    "topic": "sliding-window",
+    "level": 1,
+    "problem": "sliding-window/001-best-k-day-stretch",
+    "passed": 8,
+    "total": 8,
+    "solved": true,
+    "minutes": 30,
+    "hints": 0
+  },
+  {
+    "date": "2026-11-06T14:39:34.223Z",
+    "topic": "sliding-window",
+    "level": 1,
+    "problem": "sliding-window/003-warm-spell-count",
+    "passed": 8,
+    "total": 8,
+    "solved": true,
+    "minutes": null,
+    "hints": 0
+  }
+]

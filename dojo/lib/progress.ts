@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
-export const LOG_PATH = join(ROOT, "progress", "log.json");
+export const LOG_PATH = join(ROOT, "dojo", "progress", "log.json");
 
 export interface Attempt {
   date: string; // ISO timestamp

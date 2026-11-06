@@ -58,8 +58,10 @@
   th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); }
   th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
   tr:last-child td { border-bottom: 0; }
-  .heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 12px); gap: 3px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px; width: max-content; max-width: 100%; overflow-x: auto; }
-  .heat div { width: 12px; height: 12px; border-radius: 2px; background: var(--border); }
+  .heat { display: grid; grid-auto-flow: column; grid-template-rows: 16px repeat(7, 16px); gap: 4px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px; width: max-content; max-width: 100%; overflow-x: auto; }
+  .heat .lbl { background: none; font-size: 11px; line-height: 16px; color: var(--muted); white-space: nowrap; overflow: visible; }
+  .heat .wd { width: auto; padding-right: 4px; }
+  .heat div { width: 16px; height: 16px; border-radius: 3px; background: var(--border); }
   .heat .h1 { background: color-mix(in srgb, var(--ok) 40%, var(--border)); }
   .heat .h2 { background: color-mix(in srgb, var(--ok) 70%, var(--border)); }
   .heat .h3 { background: var(--ok); }
@@ -137,15 +139,22 @@ function renderNav(route) {
 
 function heatmap(log) {
   const counts = {};
-  for (const a of log) counts[a.date.slice(0, 10)] = (counts[a.date.slice(0, 10)] ?? 0) + 1;
+  for (const a of log.filter((a) => a.solved)) { const k = new Date(a.date).toLocaleDateString("en-CA"); counts[k] = (counts[k] ?? 0) + 1; }
   const today = new Date(); today.setHours(0, 0, 0, 0);
-  const start = new Date(today.getTime() - (7 * 16 - 1) * DAY);
-  start.setDate(start.getDate() - start.getDay()); // align columns to weeks starting Sunday
-  let cells = "";
+  const start = new Date(today); start.setDate(start.getDate() - (7 * 26 - 1)); // setDate keeps local midnight across DST, unlike subtracting ms
+  start.setDate(start.getDate() - ((start.getDay() + 6) % 7)); // align columns to weeks starting Monday
+  // First column holds the weekday labels (GitHub shows Mon/Wed/Fri); the top row holds month names.
+  let cells = `<div class="lbl wd"></div>` + ["Mon", "", "Wed", "", "Fri", "", ""].map((l) => `<div class="lbl wd">${l}</div>`).join("");
+  let lastMonth = -1;
   for (let d = new Date(start); d <= today; d.setDate(d.getDate() + 1)) {
+    if (d.getDay() === 1) {
+      const m = d.getMonth();
+      cells += `<div class="lbl">${m !== lastMonth ? d.toLocaleDateString("en", { month: "short" }) : ""}</div>`;
+      lastMonth = m;
+    }
     const key = d.toLocaleDateString("en-CA");
     const n = counts[key] ?? 0;
-    cells += `<div class="${n ? "h" + Math.min(n, 3) : ""}" title="${key}: ${n} attempt${n === 1 ? "" : "s"}"></div>`;
+    cells += `<div class="${n ? "h" + Math.min(n, 3) : ""}" title="${key}: ${n} solution${n === 1 ? "" : "s"} solved"></div>`;
   }
   return `<div class="heat">${cells}</div>`;
 }
