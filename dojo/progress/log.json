@@ -42,5 +42,27 @@
     "solved": true,
     "minutes": 90,
     "hints": 0
+  },
+  {
+    "date": "2026-11-07T15:44:47.829Z",
+    "topic": "sliding-window",
+    "level": 2,
+    "problem": "sliding-window/005-longest-run-with-repairs",
+    "passed": 9,
+    "total": 9,
+    "solved": true,
+    "minutes": 60,
+    "hints": 2
+  },
+  {
+    "date": "2026-11-07T17:15:30.302Z",
+    "topic": "sliding-window",
+    "level": 2,
+    "problem": "sliding-window/006-cheap-bundle-count",
+    "passed": 9,
+    "total": 9,
+    "solved": true,
+    "minutes": 44,
+    "hints": 2
   }
 ]
