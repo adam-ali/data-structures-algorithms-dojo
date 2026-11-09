@@ -64,5 +64,27 @@
     "solved": true,
     "minutes": 44,
     "hints": 2
+  },
+  {
+    "date": "2026-11-08T17:58:28.027Z",
+    "topic": "sliding-window",
+    "level": 1,
+    "problem": "sliding-window/007-lowest-water-use",
+    "passed": 8,
+    "total": 8,
+    "solved": true,
+    "minutes": 10,
+    "hints": 0
+  },
+  {
+    "date": "2026-11-08T18:37:58.030Z",
+    "topic": "sliding-window",
+    "level": 2,
+    "problem": "sliding-window/008-exact-delivery-run",
+    "passed": 8,
+    "total": 8,
+    "solved": true,
+    "minutes": 32,
+    "hints": 2
   }
 ]
