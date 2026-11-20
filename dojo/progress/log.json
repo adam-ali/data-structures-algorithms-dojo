@@ -97,5 +97,16 @@
     "solved": true,
     "minutes": 24,
     "hints": 0
+  },
+  {
+    "date": "2026-11-20T11:44:56.840Z",
+    "topic": "sliding-window",
+    "level": 1,
+    "problem": "sliding-window/010-most-congested-block",
+    "passed": 8,
+    "total": 8,
+    "solved": true,
+    "minutes": 14,
+    "hints": 0
   }
 ]
